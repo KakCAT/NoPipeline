@@ -32,8 +32,8 @@ namespace NoPipeline
 		public void Read(Content content, string MGCBConfigPath)
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine("Reading MGCB config " + MGCBConfigPath);
-			Console.WriteLine();
+			Console2.WriteLine("Reading MGCB config " + MGCBConfigPath);
+			Console2.WriteLine();
 			Console.ForegroundColor = ConsoleColor.Gray;
 
 			var configPath = MGCBConfigPath;
@@ -53,20 +53,20 @@ namespace NoPipeline
 						if (line.StartsWith(ContentStructure.ReferenceKeyword))
 						{
 							collectionState = CollectionStates.References;
-							Console.WriteLine();
+							Console2.WriteLine();
 						}
 						else
 						{
 							if (line.StartsWith(ContentStructure.ContentBeginKeyword))
 							{
 								collectionState = CollectionStates.Content;
-								Console.WriteLine();
+								Console2.WriteLine();
 							}
 							else
 							{
 								if (line.StartsWith(ContentStructure.KeywordStartingChar))
 								{
-									Console.WriteLine("Reading setting: " + line);
+									Console2.WriteLine("Reading setting: " + line);
 									content.AddGlobalSetting(line);
 								}
 							}
@@ -81,7 +81,7 @@ namespace NoPipeline
 						if (line.StartsWith(ContentStructure.ContentBeginKeyword))
 						{
 							collectionState = CollectionStates.Content;
-							Console.WriteLine();
+							Console2.WriteLine();
 						}
 						else
 						{
@@ -90,7 +90,7 @@ namespace NoPipeline
 								var reference = line.Substring(ContentStructure.ReferenceKeyword.Length);
 								content.AddReference(reference);
 								
-								Console.WriteLine("Reading reference: " + reference);
+								Console2.WriteLine("Reading reference: " + reference);
 							}
 						}
 					}
@@ -104,7 +104,7 @@ namespace NoPipeline
 							item = new Item(line.Substring(ContentStructure.ContentBeginKeyword.Length + 1));
 							
 							content.AddContentItem(item);
-							Console.WriteLine("Reading content:" + item.Path);
+							Console2.WriteLine("Reading content:" + item.Path);
 						}
 						else
 						{
@@ -115,7 +115,7 @@ namespace NoPipeline
 				}
 			}
 
-			Console.WriteLine("Finished reading MGCB config! Got " + content.ContentItemsCount + " items.");
+			Console2.WriteLine("Finished reading MGCB config! Got " + content.ContentItemsCount + " items.");
 			
 		}
 		

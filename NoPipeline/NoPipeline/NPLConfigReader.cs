@@ -22,13 +22,13 @@ namespace NoPipeline
 			var contentJson = (JObject)config["content"];
 			
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine("Reading NPL config.");
+			Console2.WriteLine("Reading NPL config.");
 			Console.ForegroundColor = ConsoleColor.Gray;
 
 
-			Console.WriteLine();
+			Console2.WriteLine();
 			ParseReferences(config, content);
-			Console.WriteLine();
+			Console2.WriteLine();
 
 
 			foreach (var item in contentJson)
@@ -45,7 +45,7 @@ namespace NoPipeline
 				}
 				catch
 				{
-					Console.WriteLine($"Key 'path' doesn't exist in  {sectionName}!");
+					Console2.WriteLine($"Key 'path' doesn't exist in  {sectionName}!");
 					throw new Exception($"Key 'path' doesn't exist in  {sectionName}!");
 				}
 
@@ -54,7 +54,7 @@ namespace NoPipeline
 
 
 				Console.ForegroundColor = ConsoleColor.Magenta;
-				Console.WriteLine("Reading content for: " + path);
+				Console2.WriteLine("Reading content for: " + path);
 				Console.ForegroundColor = ConsoleColor.Gray;
 
 				var fileName = Path.GetFileName(path);
@@ -78,8 +78,8 @@ namespace NoPipeline
 				catch(Exception e)
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine($"    Error reading files from {rootDir}{filePath}: ");
-					Console.WriteLine("    " + e.Message);
+					Console2.WriteLine($"    Error reading files from {rootDir}{filePath}: ");
+					Console2.WriteLine("    " + e.Message);
 					Console.ForegroundColor = ConsoleColor.Gray;
 				}
 
@@ -106,7 +106,7 @@ namespace NoPipeline
 
 					
 					
-					Console.WriteLine("    Reading " + name);
+					Console2.WriteLine("    Reading " + name);
 
 					foreach(var sect in section)
 					{
@@ -139,9 +139,9 @@ namespace NoPipeline
 
 			}
 
-			Console.WriteLine();
-			Console.WriteLine("Finished reading NPL config!");
-			Console.WriteLine();
+			Console2.WriteLine();
+			Console2.WriteLine("Finished reading NPL config!");
+			Console2.WriteLine();
 			
 
 		}
@@ -158,7 +158,7 @@ namespace NoPipeline
 			foreach (var item in contentJson)
 			{
 				var reference = Environment.ExpandEnvironmentVariables(item.ToString());
-				Console.WriteLine("Reading reference: " + reference);
+				Console2.WriteLine("Reading reference: " + reference);
 				content.AddReference(reference);
 			}
 		}

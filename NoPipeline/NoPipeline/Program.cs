@@ -9,11 +9,11 @@ namespace NoPipeline
 	
 	class Program
 	{
-		public const string Version = "1.1.0.0";
+		public const string Version = "1.1.0.2";
 		
 		static void Main(string[] args)
 		{
-			Console.WriteLine("NoPipeline v" + Version);
+			Console2.WriteLine("NoPipeline v" + Version);
 
 			// Print help information if parameter was not provided.
 			if (args.Length != 1)
@@ -27,7 +27,7 @@ namespace NoPipeline
 			Run(configPath);
 
 			#if DEBUG
-				Console.ReadKey();
+			//	Console.ReadKey();
 			#endif
 		}
 
@@ -54,7 +54,7 @@ namespace NoPipeline
 			// Check if configuration file exists.
 			if (!File.Exists(NPLConfigPath) || !File.Exists(NPLConfigPath))
 			{
-				Console.WriteLine(NPLConfigPath + " not found!");
+				Console2.WriteLine(NPLConfigPath + " not found!");
 				PrintHelp();
 				return;
 			}
@@ -65,34 +65,34 @@ namespace NoPipeline
 			var MGCBReader = new MGCBConfigReader();
 			MGCBReader.Read(content, MGCBConfigPath);
 
-			Console.WriteLine();
-			Console.WriteLine("-------------------------------------");
-			Console.WriteLine();
+			Console2.WriteLine();
+			Console2.WriteLine("-------------------------------------");
+			Console2.WriteLine();
 
 			// Create ContentProcessor object to read config file and update content
 			// content will be overwrited from config file.
 			var NPLReader = new NPLConfigReader();
 			NPLReader.Read(content, NPLConfigPath);
 
-			Console.WriteLine("-------------------------------------");
-			Console.WriteLine();
+			Console2.WriteLine("-------------------------------------");
+			Console2.WriteLine();
 
 			// Check all rules in content object and update timestamp of files if required.
 			content.CheckIntegrity(Path.GetDirectoryName(MGCBConfigPath));
 
 			// Saving MGCB file.
 
-			Console.WriteLine();
-			Console.WriteLine("-------------------------------------");
-			Console.WriteLine();
+			Console2.WriteLine();
+			Console2.WriteLine("-------------------------------------");
+			Console2.WriteLine();
 
-			Console.WriteLine("Saving new config as " + MGCBConfigPath);
-			Console.WriteLine();
+			Console2.WriteLine("Saving new config as " + MGCBConfigPath);
+			Console2.WriteLine();
 
 			File.WriteAllText(MGCBConfigPath, content.Build());
 
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Done! \\^u^/");
+			Console2.WriteLine("Done! \\^u^/");
 			Console.ForegroundColor = ConsoleColor.Gray;
 
 		}
@@ -102,10 +102,10 @@ namespace NoPipeline
 		/// </summary>
 		static void PrintHelp()
 		{
-			Console.WriteLine("Run with path to .mgcb or .npl config as an argument:");
-			Console.WriteLine("    NoPipeline.exe Content/Content.mgcb");
-			Console.WriteLine("or");
-			Console.WriteLine("    NoPipeline.exe Content/Content.npl");
+			Console2.WriteLine("Run with path to .mgcb or .npl config as an argument:");
+			Console2.WriteLine("    NoPipeline.exe Content/Content.mgcb");
+			Console2.WriteLine("or");
+			Console2.WriteLine("    NoPipeline.exe Content/Content.npl");
 		}
 
 	}

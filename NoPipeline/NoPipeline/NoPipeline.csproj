@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Console2.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="IConfigReader.cs" />
     <Compile Include="NPLConfigReader.cs" />

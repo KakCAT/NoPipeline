@@ -97,8 +97,8 @@ namespace NoPipeline
 		public void CheckIntegrity(string rootPath)
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine("Checking integrity of the final config. Hold on tight!");
-			Console.WriteLine();
+			Console2.WriteLine("Checking integrity of the final config. Hold on tight!");
+			Console2.WriteLine();
 			Console.ForegroundColor = ConsoleColor.Gray;
 
 			var checkedItems = new Dictionary<string, Item>();
@@ -115,7 +115,7 @@ namespace NoPipeline
 				int separatorIndex=fullFileName.IndexOf (';');
 				if (separatorIndex!=-1) fullFileName=fullFileName.Substring (0,separatorIndex);
 
-				Console.WriteLine("Checking " + fullFileName);
+				Console2.WriteLine("Checking " + fullFileName);
 
 				// Don't include if the file doesn't exist.
 				if (File.Exists(fullFileName))
@@ -132,33 +132,33 @@ namespace NoPipeline
 					// Pipeline thinks the file has been updated and rebuilds it.
 					foreach (var checkWildcard in item.Watch)
 					{
-						Console.WriteLine("Checking watch for " + checkWildcard);
+						Console2.WriteLine("Checking watch for " + checkWildcard);
 
 						var fileName = Path.GetFileName(checkWildcard);
 						var filePath = Path.GetDirectoryName(checkWildcard);
 
 						string[] files;
 
-						Console.WriteLine("Checking wildcars for: " + Path.Combine(relativeItemPath, filePath));
+						Console2.WriteLine("Checking wildcars for: " + Path.Combine(relativeItemPath, filePath));
 						try
 						{
 							files = Directory.GetFiles(Path.Combine(relativeItemPath, filePath), fileName, SearchOption.AllDirectories);
 						}
 						catch
 						{
-							Console.WriteLine(checkWildcard + " wasn't found. Skipping.");
+							Console2.WriteLine(checkWildcard + " wasn't found. Skipping.");
 							continue;
 						}
 
 						foreach (var file in files)
 						{
-							Console.WriteLine("Checking " + file);
+							Console2.WriteLine("Checking " + file);
 							DateTime fileLastModified = File.GetLastWriteTime(file);
 							DateTime fileCreationTime = File.GetCreationTime(file);
 
 							if (itemLastModified < fileLastModified || itemLastModified < fileCreationTime)
 							{
-								Console.WriteLine("Modifying: " + file);
+								Console2.WriteLine("Modifying: " + file);
 								File.SetLastWriteTime(Path.Combine(rootPath, item.Path), DateTime.Now);
 								break;
 							}
@@ -170,18 +170,18 @@ namespace NoPipeline
 				else
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(item.Path + " doesn't exist anymore. Removing it from the config.");
+					Console2.WriteLine(item.Path + " doesn't exist anymore. Removing it from the config.");
 					Console.ForegroundColor = ConsoleColor.Gray;
 				}
 			}
 			_contentItems = checkedItems;
 
-			Console.WriteLine();
+			Console2.WriteLine();
 
 			var checkedReferences = new HashSet<string>();
 			foreach (var reference in _references)
 			{
-				Console.WriteLine("Checking reference: " + Path.Combine(rootPath, reference));
+				Console2.WriteLine("Checking reference: " + Path.Combine(rootPath, reference));
 				if (File.Exists(Path.Combine(rootPath, reference)))
 				{
 					checkedReferences.Add(reference);
@@ -189,7 +189,7 @@ namespace NoPipeline
 				else
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(reference + " wasn't found! Deleting it from the config.");
+					Console2.WriteLine(reference + " wasn't found! Deleting it from the config.");
 					Console.ForegroundColor = ConsoleColor.Gray;
 				}
 			}
