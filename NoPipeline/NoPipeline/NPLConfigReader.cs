@@ -49,6 +49,10 @@ namespace NoPipeline
 					throw new Exception($"Key 'path' doesn't exist in  {sectionName}!");
 				}
 
+				string linkTo=null;
+				linkTo = section["linkTo"]?.ToString();
+
+
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine("Reading content for: " + path);
 				Console.ForegroundColor = ConsoleColor.Gray;
@@ -64,7 +68,12 @@ namespace NoPipeline
 					{
 						searchOpt = (section["recursive"].ToString().ToLower() == "true") ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 					}
-					files = Directory.GetFiles(Path.Combine(rootDir, filePath), fileName, searchOpt);
+
+					string searchPath;
+					if (linkTo!=null && Path.IsPathRooted (filePath)) searchPath=filePath;
+					else searchPath=Path.Combine(rootDir, filePath);
+					
+					files = Directory.GetFiles(searchPath, fileName, searchOpt);
 				}
 				catch(Exception e)
 				{
@@ -76,8 +85,26 @@ namespace NoPipeline
 
 				foreach (var file in files)
 				{
-					var name = file.Remove(0, rootDir.Length).Replace('\\', '/');
-					var newItem = new Item(name);
+					string name;
+					Item newItem;
+
+					if (linkTo!=null && Path.IsPathRooted (filePath)) 
+					{
+						name=file;
+
+						string relativePathToFileInSearch=file.Remove (0,filePath.Length+1).Replace('\\', '/');
+
+						string relativePath=Path.Combine (linkTo,relativePathToFileInSearch).Replace('\\', '/');
+
+						newItem = new Item(name+";"+relativePath);
+					}
+					else 
+					{
+						name = file.Remove(0, rootDir.Length).Replace('\\', '/');
+						newItem = new Item(name);
+					}
+
+					
 					
 					Console.WriteLine("    Reading " + name);
 
@@ -85,6 +112,12 @@ namespace NoPipeline
 					{
 						if (sect.Key == "path")
 						{ // path - already get - ignore
+							continue;
+						}
+						else if (sect.Key == "linkTo")
+						{
+							// skip linkTo: it's not a MGCB command and the file concatenation has been
+							// added manually
 							continue;
 						}
 						if (sect.Key == "processorParam")

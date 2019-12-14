@@ -105,15 +105,25 @@ namespace NoPipeline
 
 			foreach (Item item in _contentItems.Values)
 			{
-				Console.WriteLine("Checking " + Path.Combine(rootPath, item.Path));
+				string fullFileName;
+
+				// process rooted files
+				if (Path.IsPathRooted (item.Path)) fullFileName=item.Path;
+				else fullFileName=Path.Combine(rootPath, item.Path);
+
+				// remove link part if it's a linked file
+				int separatorIndex=fullFileName.IndexOf (';');
+				if (separatorIndex!=-1) fullFileName=fullFileName.Substring (0,separatorIndex);
+
+				Console.WriteLine("Checking " + fullFileName);
 
 				// Don't include if the file doesn't exist.
-				if (File.Exists(Path.Combine(rootPath, item.Path)))
+				if (File.Exists(fullFileName))
 				{
 
-					DateTime itemLastModified = File.GetLastWriteTime(rootPath + item.Path);
+					DateTime itemLastModified = File.GetLastWriteTime(fullFileName);
 					
-					var relativeItemPath = Path.Combine(rootPath, Path.GetDirectoryName(item.Path));
+					var relativeItemPath = Path.GetDirectoryName (fullFileName);
 
 					// Watched files are files which aren't tracked by the content pipeline.
 					// But they are tracked by us! We look which files were recently modified
